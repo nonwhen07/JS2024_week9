@@ -1,4 +1,48 @@
-<h1 class="header">我是 header</h1>
+<!-- <h1 class="header">我是 header</h1>
 <a href="index.html">index</a>
 <a href="about.html">about</a>
-<a href="contact.html">contact</a>
+<a href="contact.html">contact</a> -->
+
+<header>
+  <nav class="topBar">
+    <div class="wrap">
+        <h1><a href="#" class="logo">WOWOROOM</a></h1>
+        <span class="material-icons menuToggle">
+            menu
+        </span>
+        <ul class="topBar-menu">
+            <li><a href="#bedAdvantage">床墊優勢</a></li>
+            <li><a href="#recommendation">好評推薦</a></li>
+            <li><a href="#transport">運送方式</a></li>
+            <li><a href="#orderInfo">立即預訂</a></li>
+        </ul>
+    </div>
+  </nav>
+</header>
+
+<script type="text/javascript" src="../assets/js/header.js"></script>
+
+<!-- <script>
+  document.querySelector('.nav-link').classList.add('highlight');
+  //header部分
+  // menu 切換
+  let menuOpenBtn = document.querySelector('.menuToggle');
+  let linkBtn = document.querySelectorAll('.topBar-menu a');
+  let menu = document.querySelector('.topBar-menu');
+  menuOpenBtn.addEventListener('click', menuToggle);
+
+  linkBtn.forEach((item) => {
+      item.addEventListener('click', closeMenu);
+  })
+
+  function menuToggle() {
+      if(menu.classList.contains('openMenu')) {
+          menu.classList.remove('openMenu');
+      }else {
+          menu.classList.add('openMenu');
+      }
+  }
+  function closeMenu() {
+      menu.classList.remove('openMenu');
+  }
+</script> -->
