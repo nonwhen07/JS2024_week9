@@ -1,8 +1,7 @@
-@import './styles/reset.scss';
-@import './styles/global.scss';
+@use './styles/reset.scss';
+@use './styles/global.scss';
 
-@import './layout/header.scss';
-@import './layout/footer.scss';
+@use './layout/header.scss';
+@use './layout/footer.scss';
 
-
-@import './pages/index.scss';
+@use './pages/index.scss';
