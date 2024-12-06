@@ -73,4 +73,10 @@ export default defineConfig({
     VITE_API_PATH: JSON.stringify("goushs2024"),
     VITE_API_TOKEN: JSON.stringify("i0T3K2YLg6PFBZsuu4BkvMVJXQH3"),
   },
+
+  scripts: {
+    build: "vite build",
+    preview: "vite preview",
+    deploy: "vite build && gh-pages -d dist",
+  },
 });
