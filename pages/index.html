@@ -24,7 +24,8 @@
     />
   </head>
   <body>
-    <%- include('./layout/header'); -%>
+    <!-- 傳遞數據到 header -->
+    <%- include('./layout/header', { isFront: true }); -%>
 
     <button id="goTopBtn" class="goTop">Go Top</button>
 

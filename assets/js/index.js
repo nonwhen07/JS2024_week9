@@ -42,9 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //主頁的產品功能需求
 const api_Url = import.meta.env.VITE_API_URL;
-const api_Token = import.meta.env.VITE_API_TOKEN;
+const api_Path = import.meta.env.VITE_API_PATH;
+//const api_Token = import.meta.env.VITE_API_TOKEN;
 
-//const api = `${api_Url}/${api_Token}/${api_function}`;
+//const api = `${api_Url}/${api_Path}/${api_function}`;
 const cartTable = document.querySelector(".shoppingCart-table");
 const productWrap = document.querySelector(".productWrap");
 const productSelect = document.querySelector(".productSelect");
@@ -122,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
       orderData.address = orderInput[3].value;
       orderData.payment = orderInput[4].value;
       axios
-        .post(`${api_Url}/${api_Token}/${api_function}`, {
+        .post(`${api_Url}/${api_Path}/${api_function}`, {
           data: {
             user: {
               name: orderData.name,
@@ -187,7 +188,7 @@ function getProducts() {
   //let products = [];
 
   axios
-    .get(`${api_Url}/${api_Token}/${api_function}`)
+    .get(`${api_Url}/${api_Path}/${api_function}`)
     .then(function (res) {
       const products = res.data.products || []; // 確保 products 不為 null 或 undefined
 
@@ -269,7 +270,7 @@ function renderCart(carts, container) {
 function getCarts() {
   const api_function = "carts";
   axios
-    .get(`${api_Url}/${api_Token}/${api_function}`)
+    .get(`${api_Url}/${api_Path}/${api_function}`)
     .then((res) => {
       const carts = res.data.carts || []; // 確保 carts 不為 null 或 undefined
       cartData = carts; //裝入全域的 cartData 後面可以用來比對是否第一筆加入購物車
@@ -302,7 +303,7 @@ function addCart(productId) {
 
   if (comparison) {
     axios
-      .patch(`${api_Url}/${api_Token}/${api_function}`, {
+      .patch(`${api_Url}/${api_Path}/${api_function}`, {
         data: {
           id: selectProduct.cart_id,
           quantity: selectProduct.quantity + 1,
@@ -317,7 +318,7 @@ function addCart(productId) {
       });
   } else {
     axios
-      .post(`${api_Url}/${api_Token}/${api_function}`, {
+      .post(`${api_Url}/${api_Path}/${api_function}`, {
         data: {
           productId: productId,
           quantity: 1,
@@ -336,7 +337,7 @@ function addCart(productId) {
 function deleCart(cartId) {
   const api_function = "carts";
   axios
-    .delete(`${api_Url}/${api_Token}/${api_function}/${cartId}`)
+    .delete(`${api_Url}/${api_Path}/${api_function}/${cartId}`)
     .then(function (res) {
       getProducts();
       getCarts();
@@ -350,7 +351,7 @@ function deleCart(cartId) {
 function deleAllCart() {
   const api_function = "carts";
   axios
-    .delete(`${api_Url}/${api_Token}/${api_function}`)
+    .delete(`${api_Url}/${api_Path}/${api_function}`)
     .then(function (res) {
       getProducts();
       getCarts();
