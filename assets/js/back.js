@@ -109,11 +109,11 @@ function generateOrderHTML(item) {
       <td> ${item.user.email} </td>
       <td> ${productsList} </td>
       <td> ${new Date(item.createdAt * 1000).toISOString().split("T")[0]} </td>
-      <td>
+      <td class="orderBtn">
         ${
           item.paid
-            ? `<a href="#" class="putOrder" data-id="${item.id}">已處理</a>`
-            : `<a href="#" class="putOrder" data-id="${item.id}">未處理</a>`
+            ? `<a href="#" class="putOrder checkBtn" data-id="${item.id}">已處理</a>`
+            : `<a href="#" class="putOrder unCheckBtn" data-id="${item.id}">未處理</a>`
         }
       </td>
       <td class="deleBtn">

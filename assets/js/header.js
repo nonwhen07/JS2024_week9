@@ -18,6 +18,9 @@
 // };
 
 //header部分
+// goTop;
+const goTop = document.getElementById("goTopBtn");
+
 // menu 切換
 let menuOpenBtn = document.querySelector(".menuToggle");
 let linkBtn = document.querySelectorAll(".topBar-menu a");
@@ -38,3 +41,20 @@ function menuToggle() {
 function closeMenu() {
   menu.classList.remove("openMenu");
 }
+
+// 滾動事件：顯示或隱藏按鈕
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 200) {
+    goTop.style.display = "block";
+  } else {
+    goTop.style.display = "none";
+  }
+});
+
+// 點擊事件：返回頂部（平滑滾動）
+goTop.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth", // 使用平滑滾動
+  });
+});
