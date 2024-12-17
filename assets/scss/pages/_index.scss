@@ -23,6 +23,28 @@
 // 將.banner ~ .cardItem-title img
 // 移至通用樣式
 
+.updateBtn {
+  text-align: right;
+}
+
+.updateBtn a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px;
+  font-size: 2rem;
+  color: #000000;
+}
+
+.updateBtn a:hover {
+  color: #6A33F8;
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
+}
+
+
+
+
+
 .discardBtn {
   text-align: right;
 }

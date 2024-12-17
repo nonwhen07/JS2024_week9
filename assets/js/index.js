@@ -45,7 +45,6 @@ const api_Url = import.meta.env.VITE_API_URL;
 const api_Path = import.meta.env.VITE_API_PATH;
 //const api_Token = import.meta.env.VITE_API_TOKEN;
 
-//const api = `${api_Url}/${api_Path}/${api_function}`;
 const cartTable = document.querySelector(".shoppingCart-table");
 const productWrap = document.querySelector(".productWrap");
 const productSelect = document.querySelector(".productSelect");
@@ -96,18 +95,37 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("addCardBtn")) {
       e.preventDefault(); // 防止默認的跳轉行為
       const productId = e.target.dataset.id; // 取得 data-id
-      addCart(productId); // 調用 addCart 函數
+      addCart(productId);
     }
   });
+
   // cartTable 使用事件代理綁定事件 刪除單一品項、刪除所有品項
   cartTable.addEventListener("click", (e) => {
     e.preventDefault(); // 防止默認行為
+
+    //由於updateQty沒法直接點即到，調整一下改用 e.target.closest("")
+    if (e.target.classList.contains("material-icons")) {
+      const target = e.target.closest(".updateQty");
+      if (target) {
+        target.classList.add("disabled");
+        const productId = target.dataset.id; // Get product ID
+        const qty = target.dataset.qty; // Get product quantity
+        updateCart(productId, qty);
+        target.classList.remove("disabled");
+      }
+    }
     if (e.target.classList.contains("deleCart")) {
+      const target = e.target.closest(".deleCart");
+      target.classList.add("disabled");
       const productId = e.target.dataset.id; // 獲取產品 ID
       deleCart(productId);
+      target.classList.remove("disabled");
     }
     if (e.target.classList.contains("discardAllBtn")) {
+      const target = e.target.closest(".discardAllBtn");
+      target.classList.add("disabled");
       deleAllCart(); // 刪除所有品項
+      target.classList.remove("disabled");
     }
   });
 
@@ -140,7 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
           orderForm.reset(); // 套票欄位清空
         })
         .catch(function (error) {
-          console.log(error.message);
           console.error("無法送出預訂資料：", error);
           alert("無法送出預訂資料，請稍後再試！");
         });
@@ -151,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addCart = addCart; // 將函數掛載到全域作用域
+window.updateCart = updateCart;
 window.deleCart = deleCart;
 window.deleAllCart = deleAllCart;
 
@@ -222,6 +240,16 @@ function generateCartRow(item) {
       </td>
       <td>NT$${price.toLocaleString()}</td>
       <td>${quantity}</td>
+
+      <td class="updateBtn">
+        <a href="#" class="updateQty" data-id="${id}" data-qty="1">
+          <i class="material-icons">add_circle_outline</i>
+        </a>
+        <a href="#" class="updateQty" data-id="${id}" data-qty="-1">
+          <i class="material-icons">remove_circle_outline</i>
+        </a>
+      </td>
+
       <td>NT$${(price * quantity).toLocaleString()}</td>
       <td class="discardBtn">
         <a href="#" class="deleCart" data-id="${id}">clear</a>
@@ -250,6 +278,7 @@ function renderCart(carts, container) {
       </td>
       <td></td>
       <td></td>
+      <td></td>
       <td><p>總金額</p></td>
       <td>NT$${totalCost.toLocaleString()}</td>
     </tr>`;
@@ -259,7 +288,8 @@ function renderCart(carts, container) {
     <tr>
       <th width="40%">品項</th>
       <th width="15%">單價</th>
-      <th width="15%">數量</th>
+      <th width="5%">數量</th>
+      <th width="10%"></th>
       <th width="15%">金額</th>
       <th width="15%"></th>
     </tr>
@@ -330,6 +360,59 @@ function addCart(productId) {
       .catch(function (error) {
         console.error("無法加入購物車資料：", error);
         alert("無法加入購物車，請稍後再試！");
+      });
+  }
+}
+
+function updateCart(productId, qty) {
+  const api_function = "carts";
+  let comparison = false; // 先比對現有的訂單內產品，有就patch、無就post
+  let selectProduct = {};
+  cartData.forEach((item) => {
+    if (item.id == productId) {
+      selectProduct.cart_id = item.id;
+      selectProduct.product_id = item.product.id;
+
+      selectProduct.quantity = item.quantity;
+      qty == 1 ? selectProduct.quantity++ : selectProduct.quantity--; //如果剩餘數量 '加法'、'減法'
+      comparison = true;
+    }
+  });
+
+  if (comparison) {
+    if (selectProduct.quantity > 0) {
+      //如果剩餘數量 > '0'，剩餘數量 = 0，就刪除該筆項
+      axios
+        .patch(`${api_Url}/${api_Path}/${api_function}`, {
+          data: {
+            id: selectProduct.cart_id,
+            quantity: selectProduct.quantity,
+          },
+        })
+        .then(function (res) {
+          getCarts();
+        })
+        .catch(function (error) {
+          console.error("無法加入購物車資料：", error);
+          alert("無法加入購物車，請稍後再試！");
+        });
+    } else {
+      deleCart(productId);
+    }
+  } else {
+    axios
+      .post(`${api_Url}/${api_Path}/${api_function}`, {
+        data: {
+          productId: productId,
+          quantity: 1,
+        },
+      })
+      .then(function (res) {
+        getCarts();
+      })
+      .catch(function (error) {
+        console.error("無法調整購物車資料：", error);
+        alert("無法調整購物車資料，請稍後再試！");
       });
   }
 }
